@@ -7,6 +7,7 @@ import { recentSessions } from '@/constants'
 import { getAllCompanions, getRecentSessions, getUserSessions } from '@/lib/actions/companion.actions'
 import React from 'react'
 
+export const dynamic = 'force-dynamic'
 
 const Page = async () => {
   const companions = await getAllCompanions({limit: 3})
@@ -36,7 +37,7 @@ const Page = async () => {
       <section className='home-section'>
         <CompanionList
           title='Recently updated sessions'
-          companions={recentSessions}
+          companions={recentSessionsCompanions}
           classNames='w-2/3 max-lg:w-full'
         />
         <CTA/>
