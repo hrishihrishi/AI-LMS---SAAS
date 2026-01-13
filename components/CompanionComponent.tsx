@@ -6,6 +6,7 @@ import Lottie, { LottieRef, LottieRefCurrentProps } from "lottie-react"
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
 import soundwaves from "@/constants/soundwaves.json"
+import { addToSessionHistory } from "@/lib/actions/companion.actions"
 
 enum CallStatus {
     INACTIVE = 'INACTIVE',
@@ -34,7 +35,10 @@ export const CompanionComponent = ({ companionId, subject, topic, name, userName
 
     useEffect(() => {
         const onCallStart = () => setCallStatus(CallStatus.ACTIVE)
-        const onCallEnd = () => setCallStatus(CallStatus.FINISHED)
+        const onCallEnd = () => {
+            setCallStatus(CallStatus.FINISHED)
+            addToSessionHistory(companionId)
+        }
         const onMessage = (message: Message) => {
             if(message.type === 'transcript' && message.transcriptType === 'final') {
                 const newMessage= { role: message.role, content: message.transcript}
@@ -81,8 +85,8 @@ export const CompanionComponent = ({ companionId, subject, topic, name, userName
         <div>
             <section className="flex flex-col h-[70vh]">
                 <section className="flex gap-8 max-sm:flex-col">
-                    <div className="companion-section">
-                        <div className="companion-avatar" style={{ backgroundColor: "pink" }}>
+                    <div className="companion-section" style={{borderColor: "black"}}>
+                        <div className="companion-avatar">
 
                             <div className={
                                 cn('absolute transition-opacity duration-1000',
@@ -110,7 +114,7 @@ export const CompanionComponent = ({ companionId, subject, topic, name, userName
                         </div>
                         <button className="btn-mic" onClick={toggleMicrophone} disabled={callStatus !== CallStatus.ACTIVE}>
                             <Image src={isMuted ? '/icons/mic-off.svg' : '/icons/mic-on.svg'} alt="mic" width={36} height={36} />
-                            <p className="max-sm:hidden">{isMuted ? 'Turn on microphone' : 'Turn off microphone'}</p>
+                            <p className="max-sm:hidden">{isMuted ? 'Tap tou turn on microphone' : 'Tap to turn off microphone'}</p>
                         </button>
                         <button className={cn('rounded-lg py-2 cursor-pointer transition-colors w-full text-white',
                          callStatus === CallStatus.ACTIVE ? 'bg-red-700' : 'bg-primary',

@@ -4,38 +4,33 @@ import CTA from '@/components/CTA'
 import Cta from '@/components/CTA'
 import { Button } from '@/components/ui/button'
 import { recentSessions } from '@/constants'
+import { getAllCompanions, getRecentSessions, getUserSessions } from '@/lib/actions/companion.actions'
 import React from 'react'
 
 
-const Page = () => {
+const Page = async () => {
+  const companions = await getAllCompanions({limit: 3})
+  const recentSessionsCompanions = await getRecentSessions(10)
+
   return (
     <main>
       <h1>Popular Companions</h1>
       <section className='home-section'>
-        <CompanionCard
+        {companions.map((companion) => (
+          <CompanionCard 
+          key={companion.id}
+          {...companion}
+          />
+        ))}
+        {/* <CompanionCard
           id='123'
           name='Neura the Brainy Explorer'
           topic='Neural network of the brain'
           subject='science'
           duration={45}
           color='#a6dada'
-        />
-        <CompanionCard
-          id='456'
-          name='Neura the Brainy Explorer'
-          topic='Neural network of the brain'
-          subject='science'
-          duration={45}
-          color='#e6dada'
-        />
-        <CompanionCard
-          id='789'
-          name='Neura the Brainy Explorer'
-          topic='Neural network of the brain'
-          subject='science'
-          duration={45}
-          color='#ffda6e'
-        />
+        /> */}
+        
         
       </section>
       <section className='home-section'>
