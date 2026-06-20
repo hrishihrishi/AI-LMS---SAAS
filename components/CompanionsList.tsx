@@ -10,11 +10,13 @@ import {
 import { getSubjectColor } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+
 interface CompanionListProps {
   title: string;
   companions?: Companion[];
   classNames?: string;
 }
+
 import React from 'react'
 
 const CompanionList = ({ title, companions, classNames }: CompanionListProps) => {

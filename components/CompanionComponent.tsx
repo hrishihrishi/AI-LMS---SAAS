@@ -37,7 +37,7 @@ export const CompanionComponent = ({ companionId, subject, topic, name, userName
         const onCallStart = () => setCallStatus(CallStatus.ACTIVE)
         const onCallEnd = () => {
             setCallStatus(CallStatus.FINISHED)
-            addToSessionHistory(companionId)
+            // addToSessionHistory(companionId)
         }
         const onMessage = (message: Message) => {
             if(message.type === 'transcript' && message.transcriptType === 'final') {
@@ -140,7 +140,7 @@ export const CompanionComponent = ({ companionId, subject, topic, name, userName
                             )
                         } else {
                            return <p key={index} className="text-primary max-sm:text-sm">
-                                {userName}: {message.content}
+                                {userName}: {message.content} lol
                             </p>
                         }
                     })}

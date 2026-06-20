@@ -2,6 +2,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { createSupabaseClient } from "../supabase";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export const createCompanion = async (formData: CreateCompanion) => {
     const {userId: author} = await auth();
@@ -13,7 +14,12 @@ export const createCompanion = async (formData: CreateCompanion) => {
 }
 
 export const getAllCompanions = async ({limit=10, page=1, subject, topic}:GetAllCompanions) => {
+    const { userId } = await auth();
+    if (!userId) redirect('/sign-in');
+    
     const supabase = createSupabaseClient();
+
+    // Search for companions
     let query = supabase.from('companions').select()
     if (subject && topic){
         query = query.ilike('subject',`%${subject}%`).or(`topic.ilike('%${topic}%')`)
@@ -24,6 +30,15 @@ export const getAllCompanions = async ({limit=10, page=1, subject, topic}:GetAll
     }
     query = query.range((page-1)*limit, page*limit-1)
     const { data: companions,  error } = await query 
+
+    // Search and add bookmarked status
+    const bookmarkedCompanions = await getBookmarkedCompanions(userId);
+
+    const bookmarkedCompanionIds = bookmarkedCompanions?.filter(Boolean).map((companion_row: any) => companion_row.id);
+
+    companions?.forEach((companion: any) => {
+        companion.bookmarked = bookmarkedCompanionIds.includes(companion.id)
+    })
 
     if (error) throw new Error(error.message);
     return companions;
@@ -58,7 +73,7 @@ export const getRecentSessions = async(limit=10) => {
     if(error) throw new Error(error.message);
     return data.map(({ companions }) => companions);
 }
-
+ 
 export const getUserSessions = async(userId: string, limit=10) => {
     const supabase = createSupabaseClient();
 
