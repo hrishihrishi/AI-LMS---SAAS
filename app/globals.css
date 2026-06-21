@@ -132,7 +132,7 @@ body {
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-colors duration-200;
   }
 
   main {
@@ -154,23 +154,23 @@ body {
   }
 
   .companion-card {
-    @apply flex flex-col rounded-4xl border border-black px-4 py-4 gap-5 w-full min-lg:max-w-[410px] justify-between;
+    @apply flex flex-col rounded-4xl border border-border px-4 py-4 gap-5 w-full min-lg:max-w-[410px] justify-between bg-background text-foreground;
   }
 
   .subject-badge {
-    @apply bg-black text-white rounded-4xl text-sm px-2 py-1 capitalize;
+    @apply bg-foreground text-background rounded-4xl text-sm px-2 py-1 capitalize;
   }
 
   .companion-bookmark {
-    @apply px-2 bg-black rounded-4xl flex items-center h-full aspect-square cursor-pointer;
+    @apply px-2 bg-foreground rounded-4xl flex items-center h-full aspect-square cursor-pointer;
   }
 
   .input {
-    @apply !border-black !bg-white focus-visible:!ring-0 focus-visible:!border-black !w-full;
+    @apply !border-border !bg-background !text-foreground focus-visible:!ring-0 focus-visible:!border-foreground !w-full;
   }
 
   .rounded-border {
-    @apply rounded-4xl border border-black;
+    @apply rounded-4xl border border-border;
   }
 
   .cta-section {
@@ -186,15 +186,15 @@ body {
   }
 
   .navbar {
-    @apply flex items-center justify-between mx-auto w-full px-14 py-4 bg-white max-sm:px-4;
+    @apply flex items-center justify-between mx-auto w-full px-14 py-4 max-sm:px-4 bg-background text-foreground transition-colors duration-200;
   }
 
   .btn-signin {
-    @apply border border-black rounded-4xl px-4 py-2.5 text-sm font-semibold flex items-center gap-2 cursor-pointer;
+    @apply border border-border text-foreground rounded-4xl px-4 py-2.5 text-sm font-semibold flex items-center gap-2 cursor-pointer;
   }
 
   .companion-list {
-    @apply rounded-4xl border border-black px-7 pt-7 pb-10 max-lg:w-full bg-white;
+    @apply rounded-4xl border border-border px-7 pt-7 pb-10 max-lg:w-full bg-background text-foreground;
   }
 
   .companion-limit {
@@ -218,11 +218,11 @@ body {
   }
 
   .user-avatar {
-    @apply border-2 border-black flex flex-col gap-4 items-center rounded-lg py-8 max-sm:hidden;
+    @apply border-2 border-border flex flex-col gap-4 items-center rounded-lg py-8 max-sm:hidden;
   }
 
   .btn-mic {
-    @apply border-2 border-black rounded-lg flex flex-col gap-2 items-center py-8 max-sm:py-2 cursor-pointer w-full;
+    @apply border-2 border-border rounded-lg flex flex-col gap-2 items-center py-8 max-sm:py-2 cursor-pointer w-full;
   }
 
   .transcript {
