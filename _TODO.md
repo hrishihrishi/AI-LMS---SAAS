@@ -1,6 +1,4 @@
 ----TODO:---
-style(UI) : Home page black card [1.move it up ; 2.more visible button ; 3.more]
-
 feat(Companions) : Companions deleting
 feat(Notifications) : Toast notifications for all actions.
 feat(Theme): Add dark 
@@ -21,3 +19,8 @@ docs() : Professional Readme.md
 
 ----FIXED----
 style(UI) : form are not wide and not good looking. (2/3)
+style(UI) : Home page black card [1.move it up ; 2.more visible button ; 3.more] (2/3) -- image not centre aligned on mobile screens
+
+
+Commit:
+git acp "style(UI): CTA moved up, widened and Form widened"

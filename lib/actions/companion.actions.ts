@@ -52,22 +52,59 @@ export const getCompanion = async(id:string) => {
     return data?.[0];
 }
 
+// export const addToSessionHistory = async(companionId:string) => {
+//     const { userId } = await auth();
+//     const supabase = createSupabaseClient();
+//     const { data, error } = await supabase.from('session_history').insert({
+//         companion_id: companionId, user_id: userId
+//     })
+
+//     if (error) throw new Error(error.message);
+//     return data;
+// }
+
 export const addToSessionHistory = async(companionId:string) => {
     const { userId } = await auth();
+    if (!userId) throw new Error("Unauthorized");
     const supabase = createSupabaseClient();
-    const { data, error } = await supabase.from('session_history').insert({
-        companion_id: companionId, user_id: userId
-    })
 
-    if (error) throw new Error(error.message);
-    return data;
+    // Check if the record already exists for this user and companion
+    const { data: existing, error: fetchError } = await supabase
+        .from('session_history')
+        .select('companion_id')
+        .eq('companion_id', companionId)
+        .eq('user_id', userId);
+    if (fetchError) throw new Error(fetchError.message);
+
+    let result;
+    if (existing && existing.length > 0) {
+        // Update the timestamp to bring it to the top
+        const { data, error } = await supabase
+            .from('session_history')
+            .update({ last_accessed: new Date().toISOString() })
+            .eq('companion_id', companionId)
+            .eq('user_id', userId)
+            .select();
+        if (error) throw new Error(error.message);
+        result = data;
+    } else {
+        // Insert a new record if it doesn't exist
+        const { data, error } = await supabase
+            .from('session_history')
+            .insert({ companion_id: companionId, user_id: userId })
+            .select();
+        if (error) throw new Error(error.message);
+        result = data;
+    }
+    return result;
 }
+
 
 export const getRecentSessions = async(limit=10) => {
     const supabase = createSupabaseClient();
     const { data, error } = await supabase.from('session_history')
         .select(`companions:companion_id (*)`)
-        .order('created_at', { ascending: false })
+        .order('last_accessed', { ascending: false })
         .limit(limit)
 
     if(error) throw new Error(error.message);

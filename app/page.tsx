@@ -12,6 +12,7 @@ export const dynamic = 'force-dynamic'
 const Page = async () => {
   const companions = await getAllCompanions({limit: 3})
   const recentSessionsCompanions = await getRecentSessions(10)
+  console.log('recent sessions:',recentSessionsCompanions)
 
   return (
     <main>

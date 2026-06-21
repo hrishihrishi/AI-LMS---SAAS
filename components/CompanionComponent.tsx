@@ -35,9 +35,9 @@ export const CompanionComponent = ({ companionId, subject, topic, name, userName
 
     useEffect(() => {
         const onCallStart = () => setCallStatus(CallStatus.ACTIVE)
-        const onCallEnd = () => {
+        const onCallEnd = async() => {
             setCallStatus(CallStatus.FINISHED)
-            // addToSessionHistory(companionId)
+            await addToSessionHistory(companionId)
         }
         const onMessage = (message: Message) => {
             if(message.type === 'transcript' && message.transcriptType === 'final') {

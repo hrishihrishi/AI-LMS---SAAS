@@ -24,7 +24,8 @@ const CompanionList = ({ title, companions, classNames }: CompanionListProps) =>
     <article>
       <h2 className="font-bold text-3xl">{title}</h2>
       <Table>
-        {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
+
+        {/* Table header */}
         <TableHeader>
           <TableRow>
             <TableHead className="text-lg w-2/3">Lessons</TableHead>
@@ -32,9 +33,13 @@ const CompanionList = ({ title, companions, classNames }: CompanionListProps) =>
             <TableHead className="text-lg text-right">Duration</TableHead>
           </TableRow>
         </TableHeader>
+
+        {/* This contains all the companions */}
         <TableBody>
           {companions?.map(({ id, subject, name, duration, color }) => (
             <TableRow key={id}>
+
+              {/* Lessons names and icon */}
               <TableCell>
                 <Link href={`/companion/${id}`}>
                   <div className="flex items-center gap-2">
@@ -48,6 +53,8 @@ const CompanionList = ({ title, companions, classNames }: CompanionListProps) =>
                   </div>
                 </Link>
               </TableCell>
+
+              {/* Subject name or icon*/}
               <TableCell>
                 <div className="subject-badge w-fit max-md:hidden">
                   {subject}
@@ -56,6 +63,8 @@ const CompanionList = ({ title, companions, classNames }: CompanionListProps) =>
                   <Image src={`/icons/${subject}.svg`} alt="subject-icon" width={18} height={18}/>
                 </div>
               </TableCell>
+
+              {/* Duration and clock icon */}
               <TableCell>
                 <div className="flex items-center gap-2 w-full justify-end">
                   <p>{duration} min</p>
