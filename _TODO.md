@@ -4,7 +4,9 @@ feat(Companions) : Companions deleting
 
 ----TODO:---
 feat(Notifications) : Toast notifications for all actions.
-feat(Theme): Add dark 
+feat(Theme): Add dark theme
+feat(Handling): Add error handling pages and loading animations.
+feat(UI): Add empty state designs.
 
 fix(Search) : search not working
 fix(Captions) : Captions are doubling

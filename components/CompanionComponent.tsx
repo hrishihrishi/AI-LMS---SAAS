@@ -55,6 +55,16 @@ export const CompanionComponent = ({ companionId, subject, topic, name, userName
         vapi.on('error', onError)
         vapi.on('speech-start', onSpeechStart)
         vapi.on('speech-end', onSpeechEnd)
+
+        // Cleanup listener references when the component unmounts
+        return () => {
+            vapi.off('call-start', onCallStart)
+            vapi.off('call-end', onCallEnd)
+            vapi.off('message', onMessage)
+            vapi.off('error', onError)
+            vapi.off('speech-start', onSpeechStart)
+            vapi.off('speech-end', onSpeechEnd)
+        }
     }, [])
 
     const toggleMicrophone = () => {
@@ -83,7 +93,7 @@ export const CompanionComponent = ({ companionId, subject, topic, name, userName
 
     return (
         <div>
-            <section className="flex flex-col h-[70vh]">
+            <section className="flex flex-col h-auto">
                 <section className="flex gap-8 max-sm:flex-col">
                     <div className="companion-section" style={{borderColor: "black"}}>
                         <div className="companion-avatar">
@@ -126,6 +136,7 @@ export const CompanionComponent = ({ companionId, subject, topic, name, userName
                     </div>
                 </section>
                 <section className="transcript">
+
                     <div className="transcript-message no-scrollbar">
                         {messages.map((message, index) => {
                         if(message.role === 'assistant') {
@@ -140,7 +151,7 @@ export const CompanionComponent = ({ companionId, subject, topic, name, userName
                             )
                         } else {
                            return <p key={index} className="text-primary max-sm:text-sm">
-                                {userName}: {message.content} lol
+                                {userName}: {message.content} 
                             </p>
                         }
                     })}

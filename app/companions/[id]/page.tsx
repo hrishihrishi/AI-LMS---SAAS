@@ -5,7 +5,6 @@ import { getSubjectColor } from "@/lib/utils";
 import Image from "next/image";
 import { deleteCompanion } from "@/lib/actions/companion.actions";
 import CompanionComponent from "@/components/CompanionComponent";
-// import CompanionComponent from "@/components/CompanionComponent";
 import DeleteCompanionButton from "@/components/ui/DeleteCompanionButton";
 
 interface CompanionSessionPageProps {
