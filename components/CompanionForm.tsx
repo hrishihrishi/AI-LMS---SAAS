@@ -70,7 +70,7 @@ const CompanionForm = () => {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 border-black w-[50vw]">
 
                 {/* Companion name field */}
                 <FormField
@@ -83,7 +83,7 @@ const CompanionForm = () => {
                                 <Input
                                     placeholder="Enter the companion name"
                                     {...field}
-                                    className="border-black w-[50vw]"
+                                    // className=""
                                 />
                             </FormControl>
                             <FormMessage />

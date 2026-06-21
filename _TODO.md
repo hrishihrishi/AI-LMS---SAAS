@@ -1,17 +1,15 @@
 ----IN PROGRESS----
+feat(Companions): save conversation in supabase.
 
-2. feat(Theme): Add dark theme
 
 
 ----TODO:---
 feat(Notifications) : Toast notifications for all actions.
 feat(Handling): Add error handling pages and loading animations.
 feat(UI): Add empty state designs.
-feat(Companions): save conversation in supabase.
 
 fix(UI Responsiveness) : for mobile and tablets.
 
-chore(Comments) : Add understandable comments 
 chore(Testing) : Add test cases
 chore(Performance) : Improve performance
 chore(Logo) : Change converso logo
@@ -28,3 +26,5 @@ fix(Companion Card) : Colour random picking not working (1/1)
 fix(Captions) : Captions are doubling
 feat(Companions) : Companions deleting
 fix(Search) : search not working
+chore(Comments) : Add understandable comments 
+feat(Theme): Add dark theme (1/3)
