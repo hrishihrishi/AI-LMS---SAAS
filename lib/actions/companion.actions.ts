@@ -99,6 +99,17 @@ export const addToSessionHistory = async(companionId:string) => {
     return result;
 }
 
+export const deleteCompanion = async(companionId: string) => {
+    const {userId} = await auth();
+    if (!userId) throw new Error("Unauthorized");
+
+    const supabase = createSupabaseClient();
+    const { data, error } = await supabase.from('companions').delete().eq('id', companionId).eq('author', userId)
+
+    if (error) throw new Error(error.message);
+    return data;
+}
+
 
 export const getRecentSessions = async(limit=10) => {
     const supabase = createSupabaseClient();

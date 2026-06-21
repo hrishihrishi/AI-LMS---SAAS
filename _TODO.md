@@ -1,5 +1,8 @@
-----TODO:---
+----IN PROGRESS----
 feat(Companions) : Companions deleting
+
+
+----TODO:---
 feat(Notifications) : Toast notifications for all actions.
 feat(Theme): Add dark 
 
