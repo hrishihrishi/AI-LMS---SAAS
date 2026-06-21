@@ -5,7 +5,7 @@ import React from "react";
 const CTA = () => {
   return (
     // <section className="cta-section">
-    <section className="flex flex-wrap text-white rounded-4xl px-2 py-4 bg-lime-400 justify-between items-center">
+    <section className="flex flex-wrap text-white rounded-4xl px-2 py-4 bg-lime-400 justify-center items-center">
       <Image src="images/cta.svg" alt="cta-image" width={162} height={100} />
       <div className="flex flex-col items-center text-center gap-3">
         <h2 className="text-2xl font-bold">
@@ -18,7 +18,7 @@ const CTA = () => {
           </Link>
         </button>
       </div>
-      <Image src="images/cta.svg" alt="cta-image" width={162} height={100} />
+      <Image src="images/cta.svg" alt="cta-image" width={162} height={100} className="max-sm:hidden"/>
     </section>
   );
 };

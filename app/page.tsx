@@ -25,15 +25,6 @@ const Page = async () => {
           {...companion}
           />
         ))}
-        {/* <CompanionCard
-          id='123'
-          name='Neura the Brainy Explorer'
-          topic='Neural network of the brain'
-          subject='science'
-          duration={45}
-          color='#a6dada'
-        /> */}
-        
         
       </section>
       <section className='home-section'>

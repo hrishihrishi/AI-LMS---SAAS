@@ -6,6 +6,7 @@ import { Button } from './ui/button';
 import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation';
 import { addBookmark, removeBookmark, getBookmarkedCompanions } from '@/lib/actions/companion.actions';
+import { getSubjectColor } from '@/lib/utils';
 
 interface CompanionCardsProps {
     id: string;
@@ -13,7 +14,6 @@ interface CompanionCardsProps {
     topic: string;
     subject: string;
     duration: number;
-    color: string;
     bookmarked: boolean;
 }
 
@@ -23,11 +23,11 @@ const CompanionCard = ({
     topic,
     subject,
     duration,
-    color,
     bookmarked
 }: CompanionCardsProps) => {
     return (
-        <article className='companion-card' style={{ backgroundColor: color }}>
+        // style={{backgroundColor: getSubjectColor(subject)}
+        <article className='companion-card' style={{backgroundColor: getSubjectColor(subject)}}>
             <div className='flex justify-between items-center'>
                 <div className='subject-badge'>{subject}</div>
                 <button className='companion-bookmark'
