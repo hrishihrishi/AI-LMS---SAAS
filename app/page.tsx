@@ -15,6 +15,7 @@ const Page = async () => {
 
   return (
     <main>
+      <CTA/>
       <h1>Popular Companions</h1>
       <section className='home-section'>
         {companions.map((companion) => (
@@ -40,7 +41,6 @@ const Page = async () => {
           companions={recentSessionsCompanions}
           classNames='w-2/3 max-lg:w-full'
         />
-        <CTA/>
       </section>
     </main>
   )

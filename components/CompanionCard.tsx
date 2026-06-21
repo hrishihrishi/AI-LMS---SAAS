@@ -26,8 +26,6 @@ const CompanionCard = ({
     color,
     bookmarked
 }: CompanionCardsProps) => {
-
-
     return (
         <article className='companion-card' style={{ backgroundColor: color }}>
             <div className='flex justify-between items-center'>

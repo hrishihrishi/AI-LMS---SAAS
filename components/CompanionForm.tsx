@@ -62,6 +62,8 @@ const CompanionForm = () => {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+
+{/* Companion name */}
                 <FormField
                     control={form.control}
                     name="name"
@@ -72,13 +74,15 @@ const CompanionForm = () => {
                                 <Input
                                     placeholder="Enter the companion name"
                                     {...field}
-                                    className="input"
+                                    className="border-black w-[50vw]"
                                 />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
+                
+{/* Subject */}
                 <FormField
                     control={form.control}
                     name="subject"
@@ -111,6 +115,8 @@ const CompanionForm = () => {
                         </FormItem>
                     )}
                 />
+
+{/* What should the companion help with? */}
                 <FormField
                     control={form.control}
                     name="topic"
@@ -129,6 +135,7 @@ const CompanionForm = () => {
                     )}
                 />
 
+{/* Voice */}
                 <FormField
                     control={form.control}
                     name="voice"
@@ -160,6 +167,8 @@ const CompanionForm = () => {
                         </FormItem>
                     )}
                 />
+
+{/* Style */}
                 <FormField
                     control={form.control}
                     name="style"
@@ -192,6 +201,7 @@ const CompanionForm = () => {
                     )}
                 />
 
+{/* Duration */}
                 <FormField
                     control={form.control}
                     name="duration"
