@@ -26,6 +26,7 @@ import {Textarea} from "@/components/ui/textarea";
 import {createCompanion} from "@/lib/actions/companion.actions";
 import {redirect} from "next/navigation";
 
+// Define strict validation rules using Zod for client-side form validation
 const formSchema = z.object({
     name: z.string().min(1, { message: 'Companion is required.'}),
     subject: z.string().min(1, { message: 'Subject is required.'}),
@@ -35,7 +36,13 @@ const formSchema = z.object({
     duration: z.coerce.number().min(1, { message: 'Duration is required.'}),
 })
 
+/**
+ * CompanionForm Component
+ * Renders a validation-controlled form to build a new AI learning companion.
+ * Integrates react-hook-form and Zod validation. On submit, calls backend actions to persist the companion.
+ */
 const CompanionForm = () => {
+    // Initialize the form state with default values and resolver schema
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -48,9 +55,11 @@ const CompanionForm = () => {
         },
     })
 
+    // Callback invoked when form passes validation checks
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         const companion = await createCompanion(values);
 
+        // Redirect user to the companion's workspace page on success
         if(companion) {
             redirect(`/companions/${companion.id}`);
         } else {
@@ -63,7 +72,7 @@ const CompanionForm = () => {
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 
-{/* Companion name */}
+                {/* Companion name field */}
                 <FormField
                     control={form.control}
                     name="name"
@@ -82,7 +91,7 @@ const CompanionForm = () => {
                     )}
                 />
                 
-{/* Subject */}
+                {/* Subject selection dropdown field */}
                 <FormField
                     control={form.control}
                     name="subject"
@@ -116,7 +125,7 @@ const CompanionForm = () => {
                     )}
                 />
 
-{/* What should the companion help with? */}
+                {/* Companion learning topics details field */}
                 <FormField
                     control={form.control}
                     name="topic"
@@ -135,7 +144,7 @@ const CompanionForm = () => {
                     )}
                 />
 
-{/* Voice */}
+                {/* AI Voice selector (Male / Female options) field */}
                 <FormField
                     control={form.control}
                     name="voice"
@@ -168,7 +177,7 @@ const CompanionForm = () => {
                     )}
                 />
 
-{/* Style */}
+                {/* AI Style selector (Formal / Casual options) field */}
                 <FormField
                     control={form.control}
                     name="style"
@@ -201,7 +210,7 @@ const CompanionForm = () => {
                     )}
                 />
 
-{/* Duration */}
+                {/* Session duration length field */}
                 <FormField
                     control={form.control}
                     name="duration"
@@ -226,4 +235,4 @@ const CompanionForm = () => {
     )
 }
 
-export default CompanionForm
+export default CompanionForm;

@@ -1,5 +1,6 @@
 ----IN PROGRESS----
-feat(Theme): Add dark theme
+
+2. feat(Theme): Add dark theme
 
 
 ----TODO:---
@@ -8,10 +9,9 @@ feat(Handling): Add error handling pages and loading animations.
 feat(UI): Add empty state designs.
 feat(Companions): save conversation in supabase.
 
-fix(Search) : search not working
 fix(UI Responsiveness) : for mobile and tablets.
 
-chore(Comments) : Add understandable comments
+chore(Comments) : Add understandable comments 
 chore(Testing) : Add test cases
 chore(Performance) : Improve performance
 chore(Logo) : Change converso logo
@@ -27,3 +27,4 @@ fix(recent session) : added last_accessed column in supabase and changed orderby
 fix(Companion Card) : Colour random picking not working (1/1) 
 fix(Captions) : Captions are doubling
 feat(Companions) : Companions deleting
+fix(Search) : search not working

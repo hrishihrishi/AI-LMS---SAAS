@@ -14,17 +14,26 @@ import {
 import Image from "next/image";
 import CompanionsList from "@/components/CompanionsList";
 
+/**
+ * Profile Page / My Journey (Server Component)
+ * Displays user profile metadata, stats (completed lessons, companions created),
+ * and dynamic accordion sections detailing user-specific companion data (bookmarks, history, creations).
+ */
 const Profile = async () => {
+  // Retrieve the current user session data from Clerk
   const user = await currentUser();
 
+  // Redirect if unauthorized
   if (!user) redirect("/sign-in");
 
+  // Fetch concurrently database records for companions created, session history, and bookmarks
   const companions = await getUserCompanions(user.id);
   const sessionHistory = await getUserSessions(user.id);
   const bookmarkedCompanions = await getBookmarkedCompanions(user.id);
 
   return (
     <main className="min-lg:w-3/4">
+      {/* Profile Header Details & Stats Panel Section */}
       <section className="flex justify-between gap-4 max-sm:flex-col items-center">
         <div className="flex gap-4 items-center">
           <Image
@@ -32,6 +41,7 @@ const Profile = async () => {
             alt={user.firstName!}
             width={110}
             height={110}
+            className="rounded-full"
           />
           <div className="flex flex-col gap-2">
             <h1 className="font-bold text-2xl">
@@ -42,7 +52,10 @@ const Profile = async () => {
             </p>
           </div>
         </div>
+        
+        {/* Quick summary stats metrics counters */}
         <div className="flex gap-4">
+          {/* Lessons completed stat */}
           <div className="border border-black rouded-lg p-3 gap-2 flex flex-col h-fit">
             <div className="flex gap-2 items-center">
               <Image
@@ -55,6 +68,8 @@ const Profile = async () => {
             </div>
             <div>Lessons completed</div>
           </div>
+          
+          {/* Companions created stat */}
           <div className="border border-black rouded-lg p-3 gap-2 flex flex-col h-fit">
             <div className="flex gap-2 items-center">
               <Image src="/icons/cap.svg" alt="cap" width={22} height={22} />
@@ -76,6 +91,8 @@ const Profile = async () => {
             />
           </AccordionContent>
         </AccordionItem>
+        
+        {/* Recently completed session history */}
         <AccordionItem value="recent">
           <AccordionTrigger className="text-2xl font-bold">
             Recent Sessions
@@ -87,12 +104,15 @@ const Profile = async () => {
             />
           </AccordionContent>
         </AccordionItem>
+        
+        {/* User-created companions list */}
         <AccordionItem value="companions">
           <AccordionTrigger className="text-2xl font-bold">
             My Companions {`(${companions.length})`}
           </AccordionTrigger>
           <AccordionContent>
-            <CompanionsList title="My Companions" companions={companions} />
+            <CompanionsList title="My Companions" 
+            companions={companions} />
           </AccordionContent>
         </AccordionItem>
       </Accordion>

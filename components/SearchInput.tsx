@@ -5,17 +5,25 @@ import {useEffect, useState} from "react";
 import Image from "next/image";
 import {formUrlQuery, removeKeysFromUrlQuery} from "@jsmastery/utils";
 
+/**
+ * SearchInput Component
+ * Renders a debounced search input field that filters companions based on the "topic" query param.
+ * Uses a debounce of 500ms to optimize route push performance.
+ */
 const SearchInput = () => {
     const pathname = usePathname();
     const router = useRouter();
     const searchParams = useSearchParams();
     const query = searchParams.get('topic') || '';
 
+    // Local state to manage the user's current search input value
     const [searchQuery, setSearchQuery] = useState('');
 
+    // Handle debounce logic for updating the URL query params
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
             if(searchQuery) {
+                // Generate new URL with updated 'topic' query parameter
                 const newUrl = formUrlQuery({
                     params: searchParams.toString(),
                     key: "topic",
@@ -24,6 +32,7 @@ const SearchInput = () => {
 
                 router.push(newUrl, { scroll: false });
             } else {
+                // If query is empty, remove the 'topic' key from search parameters
                 if(pathname === '/companions') {
                     const newUrl = removeKeysFromUrlQuery({
                         params: searchParams.toString(),
@@ -34,6 +43,9 @@ const SearchInput = () => {
                 }
             }
         }, 500)
+
+        // Clear timeout on search query change to reset debounce
+        return () => clearTimeout(delayDebounceFn);
     }, [searchQuery, router, searchParams, pathname]);
 
     return (

@@ -3,15 +3,32 @@ import { twMerge } from "tailwind-merge";
 import { subjectsColors, voices } from "@/constants";
 import { CreateAssistantDTO } from "@vapi-ai/web/dist/api";
 
+/**
+ * cn Utility
+ * Merges class names safely using clsx and tailwind-merge to avoid CSS class clashes.
+ */
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+/**
+ * getSubjectColor
+ * Returns the hex code or CSS color variable corresponding to a subject category.
+ */
 export const getSubjectColor = (subject: string) => {
   return subjectsColors[subject as keyof typeof subjectsColors];
 };
 
+/**
+ * configureAssistant
+ * Returns a configured payload structure (CreateAssistantDTO) used to customize
+ * the Vapi voice assistant's transcriber, ElevenLabs voice ID, and AI LLM prompt.
+ * 
+ * @param voice - Selected voice name (e.g., 'male', 'female')
+ * @param style - Teaching conversation style (e.g., 'formal', 'casual')
+ */
 export const configureAssistant = (voice: string, style: string) => {
+  // Resolve Voice ID from the predefined voices constants mapping
   const voiceId = voices[voice as keyof typeof voices][
           style as keyof (typeof voices)[keyof typeof voices]
           ] || "sarah";
@@ -20,11 +37,13 @@ export const configureAssistant = (voice: string, style: string) => {
     name: "Companion",
     firstMessage:
         "Hello, let's start the session. Today we'll be talking about {{topic}}.",
+    // Configure voice-to-text transcriber engine
     transcriber: {
       provider: "deepgram",
       model: "nova-3",
       language: "en",
     },
+    // Configure ElevenLabs speech generation parameters
     voice: {
       provider: "11labs",
       voiceId: voiceId,
@@ -34,6 +53,7 @@ export const configureAssistant = (voice: string, style: string) => {
       style: 0.5,
       useSpeakerBoost: true,
     },
+    // Configure OpenAI GPT model parameter system instructions
     model: {
       provider: "openai",
       model: "gpt-4",
@@ -41,7 +61,7 @@ export const configureAssistant = (voice: string, style: string) => {
         {
           role: "system",
           content: `You are a highly knowledgeable tutor teaching a real-time voice session with a student. Your goal is to teach the student about the topic and subject.
-
+ 
                     Tutor Guidelines:
                     Stick to the given topic - {{ topic }} and subject - {{ subject }} and teach the student about it.
                     Keep the conversation flowing smoothly while maintaining control.

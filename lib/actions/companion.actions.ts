@@ -1,9 +1,14 @@
 'use server'
+
 import { auth } from "@clerk/nextjs/server";
 import { createSupabaseClient } from "../supabase";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+/**
+ * createCompanion Server Action
+ * Creates a new learning companion inside Supabase and sets the author to the current user's clerk ID.
+ */
 export const createCompanion = async (formData: CreateCompanion) => {
     const {userId: author} = await auth();
     const supabase = createSupabaseClient();
@@ -13,14 +18,21 @@ export const createCompanion = async (formData: CreateCompanion) => {
     return data[0]
 }
 
+/**
+ * getAllCompanions Server Action
+ * Retrieves companions from Supabase with support for pagination, and search filters (by subject and/or topic).
+ * Also appends a transient `bookmarked` Boolean status for each companion returned.
+ */
 export const getAllCompanions = async ({limit=10, page=1, subject, topic}:GetAllCompanions) => {
     const { userId } = await auth();
     if (!userId) redirect('/sign-in');
     
     const supabase = createSupabaseClient();
 
-    // Search for companions
+    // Query builder initialization
     let query = supabase.from('companions').select()
+    
+    // Apply ilike case-insensitive filters depending on provided parameters
     if (subject && topic){
         query = query.ilike('subject',`%${subject}%`).or(`topic.ilike('%${topic}%')`)
     } else if (subject){
@@ -28,14 +40,16 @@ export const getAllCompanions = async ({limit=10, page=1, subject, topic}:GetAll
     } else if (topic){
         query = query.ilike('topic',`%${topic}%`)
     }
+    
+    // Apply offset range pagination limits
     query = query.range((page-1)*limit, page*limit-1)
     const { data: companions,  error } = await query 
 
-    // Search and add bookmarked status
+    // Retrieve active bookmarks for the current user
     const bookmarkedCompanions = await getBookmarkedCompanions(userId);
-
     const bookmarkedCompanionIds = bookmarkedCompanions?.filter(Boolean).map((companion_row: any) => companion_row.id);
 
+    // Map through results and append matching `bookmarked` Boolean flags
     companions?.forEach((companion: any) => {
         companion.bookmarked = bookmarkedCompanionIds.includes(companion.id)
     })
@@ -44,6 +58,10 @@ export const getAllCompanions = async ({limit=10, page=1, subject, topic}:GetAll
     return companions;
 }
 
+/**
+ * getCompanion Server Action
+ * Fetches a single companion profile record by its primary ID.
+ */
 export const getCompanion = async(id:string) => {
     const supabase = createSupabaseClient();
     const { data, error } = await supabase.from('companions').select().eq('id', id)
@@ -52,23 +70,17 @@ export const getCompanion = async(id:string) => {
     return data?.[0];
 }
 
-// export const addToSessionHistory = async(companionId:string) => {
-//     const { userId } = await auth();
-//     const supabase = createSupabaseClient();
-//     const { data, error } = await supabase.from('session_history').insert({
-//         companion_id: companionId, user_id: userId
-//     })
-
-//     if (error) throw new Error(error.message);
-//     return data;
-// }
-
+/**
+ * addToSessionHistory Server Action
+ * Upserts a session history item. If the companion was accessed previously, updates last_accessed timestamp.
+ * Otherwise, inserts a new entry into session_history.
+ */
 export const addToSessionHistory = async(companionId:string) => {
     const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
     const supabase = createSupabaseClient();
 
-    // Check if the record already exists for this user and companion
+    // Query if record exists for this user and companion combination
     const { data: existing, error: fetchError } = await supabase
         .from('session_history')
         .select('companion_id')
@@ -78,7 +90,7 @@ export const addToSessionHistory = async(companionId:string) => {
 
     let result;
     if (existing && existing.length > 0) {
-        // Update the timestamp to bring it to the top
+        // Record exists, update the last_accessed field to now
         const { data, error } = await supabase
             .from('session_history')
             .update({ last_accessed: new Date().toISOString() })
@@ -88,7 +100,7 @@ export const addToSessionHistory = async(companionId:string) => {
         if (error) throw new Error(error.message);
         result = data;
     } else {
-        // Insert a new record if it doesn't exist
+        // No prior record, insert a new session entry
         const { data, error } = await supabase
             .from('session_history')
             .insert({ companion_id: companionId, user_id: userId })
@@ -99,6 +111,10 @@ export const addToSessionHistory = async(companionId:string) => {
     return result;
 }
 
+/**
+ * deleteCompanion Server Action
+ * Deletes a companion. Restricts deleting only to the companion's creator (author).
+ */
 export const deleteCompanion = async(companionId: string) => {
     const {userId} = await auth();
     if (!userId) throw new Error("Unauthorized");
@@ -110,7 +126,10 @@ export const deleteCompanion = async(companionId: string) => {
     return data;
 }
 
-
+/**
+ * getRecentSessions Server Action
+ * Fetches the user's recently accessed companion sessions, ordered by last_accessed descending.
+ */
 export const getRecentSessions = async(limit=10) => {
     const supabase = createSupabaseClient();
     const { data, error } = await supabase.from('session_history')
@@ -122,6 +141,10 @@ export const getRecentSessions = async(limit=10) => {
     return data.map(({ companions }) => companions);
 }
  
+/**
+ * getUserSessions Server Action
+ * Fetches companion sessions for a specified user, ordered by creation date.
+ */
 export const getUserSessions = async(userId: string, limit=10) => {
     const supabase = createSupabaseClient();
 
@@ -135,6 +158,10 @@ export const getUserSessions = async(userId: string, limit=10) => {
     return data.map(({ companions }) => companions);
 }
 
+/**
+ * getUserCompanions Server Action
+ * Fetches all companions authored/created by the specified user.
+ */
 export const getUserCompanions = async (userId: string) => {
     const supabase = createSupabaseClient();
     const { data, error } = await supabase
@@ -147,8 +174,10 @@ export const getUserCompanions = async (userId: string) => {
     return data;
 }
 
-
-// Bookmarks
+/**
+ * addBookmark Server Action
+ * Adds a companion record to the user's bookmarks list and triggers route path cache revalidation.
+ */
 export const addBookmark = async (companionId: string, path: string) => {
   const { userId } = await auth();
   if (!userId) return;
@@ -160,12 +189,16 @@ export const addBookmark = async (companionId: string, path: string) => {
   if (error) {
     throw new Error(error.message);
   }
-  // Revalidate the path to force a re-render of the page
 
+  // Clear path cache to force dynamic server-side update of bookmark badges
   revalidatePath(path);
   return data;
 };
 
+/**
+ * removeBookmark Server Action
+ * Deletes a companion record from the user's bookmarks list and triggers route path cache revalidation.
+ */
 export const removeBookmark = async (companionId: string, path: string) => {
   const { userId } = await auth();
   if (!userId) return;
@@ -182,16 +215,19 @@ export const removeBookmark = async (companionId: string, path: string) => {
   return data;
 };
 
-
+/**
+ * getBookmarkedCompanions Server Action
+ * Retrieves all companions bookmarked by a specified user.
+ */
 export const getBookmarkedCompanions = async (userId: string) => {
   const supabase = createSupabaseClient();
   const { data, error } = await supabase
     .from("bookmarks")
-    .select(`companions:companion_id (*)`) // Notice the (*) to get all the companion data
+    .select(`companions:companion_id (*)`)
     .eq("user_id", userId);
   if (error) {
     throw new Error(error.message);
   }
-  // We don't need the bookmarks data, so we return only the companions
+  // Return only the mapped companion objects
   return data.map(({ companions }) => companions);
 };
