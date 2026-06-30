@@ -1,7 +1,6 @@
 # Converso — AI-Powered Learning Management System
 
 Converso is an industry-grade, real-time AI-powered tutoring and Learning Management System (LMS) designed to facilitate interactive, voice-driven study sessions. Leveraging cutting-edge Speech-to-Speech (S2S) AI models and a modern web stack, Converso allows users to build personalized AI companions tailored to specific subjects and topics, participate in voice learning sessions, and track their educational journey.
-
 ---
 
 ## 🚀 Key Features
