@@ -64,7 +64,7 @@ To run Converso locally, you will need to set up the following keys in a `.env.l
 
 ```env
 # Clerk Authentication Keys
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
 CLERK_SECRET_KEY=your_clerk_secret_key
 
 # Clerk Route Configurations
