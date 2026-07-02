@@ -56,3 +56,22 @@ node_modules/
 
 
 .auth/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+
+# Local Turbopack cache
+.turbo/
+
+# ESLint cache
+.eslintcache
+
+# npm cache
+.npm/
+
+# Optional
+*.log

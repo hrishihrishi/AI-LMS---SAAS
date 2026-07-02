@@ -17,7 +17,7 @@ test.describe('Dashboard E2E Tests', () => {
     const searchInput = page.locator('input[id="search-companions"]');
     // await expect(searchInput).toBeVisible();
     await searchInput.fill('blah');
-    
+     
     // Check that search params are reflected in the URL
     await expect(page).toHaveURL(/.*topic=blah/);
   });
